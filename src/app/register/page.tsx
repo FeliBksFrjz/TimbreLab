@@ -47,13 +47,10 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="relative min-h-screen bg-[#0a0a0a] flex flex-col items-center justify-center overflow-hidden">
-      {/* Background de Estrelas Fixo */}
-      <div className="fixed -inset-[50px] bg-stars pointer-events-none z-0" />
-
+    <div className="relative min-h-screen bg-[#000000] flex flex-col items-center justify-center overflow-hidden">
       <Header />
 
-      <main className="relative z-10 w-full max-w-md px-6 pt-24 pb-12">
+      <main className="relative z-[2] w-full max-w-md px-6 pt-24 pb-12">
         <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-8 md:p-10 shadow-2xl flex flex-col items-center">
           <h1 className="text-3xl font-extrabold text-white mb-8 tracking-tight text-center">Criar conta no TimbreLab</h1>
           

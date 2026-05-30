@@ -36,13 +36,10 @@ export default function PresetsPage() {
   });
 
   return (
-    <div className="relative min-h-screen bg-[#0a0a0a] overflow-x-hidden flex flex-col">
-      {/* Background de Estrelas Fixo */}
-      <div className="fixed -inset-[50px] bg-stars pointer-events-none z-0" />
-
+    <div className="relative min-h-screen bg-[#000000] overflow-x-hidden flex flex-col">
       <Header />
 
-      <main className="relative z-10 flex-1 w-full max-w-7xl mx-auto px-6 pt-32 pb-24 flex flex-col gap-10">
+      <main className="relative z-[2] flex-1 w-full max-w-7xl mx-auto px-6 pt-32 pb-24 flex flex-col gap-10">
         
         {/* Barra de Busca */}
         <div className="relative max-w-2xl mx-auto w-full">
