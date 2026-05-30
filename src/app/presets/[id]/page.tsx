@@ -6,32 +6,37 @@ import { Star, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/lib/supabase";
 
-function Knob({ rotation, hasDots }: { rotation: number; hasDots: boolean }) {
-  const containerSize = 84;
-  const knobSize = 64;
-  const knobOffset = (containerSize - knobSize) / 2; // 10
-  const cx = containerSize / 2; // 42
-  const cy = containerSize / 2; // 42
-  const dotRadius = 39;
-  const dotsCount = 9;
+function Knob({
+  rotation,
+  styleType,
+}: {
+  rotation: number;
+  styleType: "smooth" | "dots";
+}) {
+  const size = 60;
+  const knobSize = 42;
+  const center = size / 2;
+  const markerRadius = 27;
 
   return (
-    <div className="relative" style={{ width: `${containerSize}px`, height: `${containerSize}px` }}>
-      {hasDots &&
-        Array.from({ length: dotsCount }).map((_, i) => {
-          const angle = -135 + (i * 270) / (dotsCount - 1);
-          const angleRad = (angle * Math.PI) / 180;
-          const x = cx + dotRadius * Math.sin(angleRad);
-          const y = cy - dotRadius * Math.cos(angleRad);
+    <div style={{ position: "relative", width: size, height: size }}>
+      {styleType === "dots" &&
+        Array.from({ length: 9 }).map((_, i) => {
+          const angle = -135 + (i * 270) / 8;
+          const rad = (angle * Math.PI) / 180;
+          const x = center + markerRadius * Math.sin(rad);
+          const y = center - markerRadius * Math.cos(rad);
           return (
             <div
               key={i}
-              className="absolute rounded-full bg-white"
               style={{
-                width: "5px",
-                height: "5px",
-                left: `${x}px`,
-                top: `${y}px`,
+                position: "absolute",
+                width: 3,
+                height: 3,
+                borderRadius: "50%",
+                backgroundColor: "rgba(255,255,255,0.9)",
+                left: x,
+                top: y,
                 transform: "translate(-50%, -50%)",
               }}
             />
@@ -39,29 +44,28 @@ function Knob({ rotation, hasDots }: { rotation: number; hasDots: boolean }) {
         })}
 
       <div
-        className="absolute"
         style={{
-          width: `${knobSize}px`,
-          height: `${knobSize}px`,
-          left: `${knobOffset}px`,
-          top: `${knobOffset}px`,
+          position: "absolute",
+          width: knobSize,
+          height: knobSize,
+          left: (size - knobSize) / 2,
+          top: (size - knobSize) / 2,
           borderRadius: "50%",
-          backgroundColor: "#1a1d22",
-          border: "2px solid #4a4f5a",
-          boxShadow:
-            "inset 0 2px 8px rgba(0,0,0,0.7), 0 2px 4px rgba(0,0,0,0.4)",
+          backgroundColor: "#1a1d24",
+          border: "3px solid #5a5f6a",
+          boxShadow: "inset 0 2px 8px rgba(0,0,0,0.9), 0 1px 2px rgba(0,0,0,0.4)",
         }}
       >
         <div
           style={{
             position: "absolute",
-            width: "2px",
-            height: "18px",
+            width: 2,
+            height: 10,
             backgroundColor: "white",
-            borderRadius: "1px",
-            top: "7px",
+            borderRadius: 1,
+            top: 4,
             left: "calc(50% - 1px)",
-            transformOrigin: "50% 25px",
+            transformOrigin: `50% ${knobSize / 2 - 8}px`,
             transform: `rotate(${rotation}deg)`,
             transition: "transform 0.5s ease-out",
           }}
@@ -71,8 +75,33 @@ function Knob({ rotation, hasDots }: { rotation: number; hasDots: boolean }) {
   );
 }
 
-const footswitchGradient =
-  "radial-gradient(circle at 50% 50%, #d0d0d0 0%, #b8b8b8 30%, #909090 65%, #808080 100%)";
+function Footswitch() {
+  return (
+    <div
+      style={{
+        width: 48,
+        height: 48,
+        borderRadius: "50%",
+        background: "radial-gradient(circle at 40% 38%, #e8e8e8, #b0b0b0 45%, #808080 75%)",
+        border: "3px solid #999",
+        boxShadow: "0 4px 12px rgba(0,0,0,0.6), inset 0 2px 4px rgba(255,255,255,0.4), inset 0 -2px 4px rgba(0,0,0,0.3)",
+        position: "relative",
+      }}
+    >
+      <div
+        style={{
+          position: "absolute",
+          top: 4,
+          left: 4,
+          right: 4,
+          bottom: 4,
+          borderRadius: "50%",
+          background: "radial-gradient(circle at 38% 35%, rgba(255,255,255,0.8), rgba(200,200,200,0.4) 40%, rgba(150,150,150,0.3) 60%, transparent 80%)",
+        }}
+      />
+    </div>
+  );
+}
 
 export default function PresetDetailsPage({
   params,
@@ -125,6 +154,7 @@ export default function PresetDetailsPage({
   }
 
   const settings = [
+    { id: "volume", label: "VOLUME", value: 6.0 },
     { id: "ircab", label: "IR CAB", value: preset.ir_cab },
     { id: "reverb", label: "REVERB", value: preset.reverb },
     { id: "mix", label: "MIX", value: preset.mix },
@@ -134,23 +164,17 @@ export default function PresetDetailsPage({
     {
       id: "tone",
       label: "TONE",
-      value: isHeavy
-        ? Math.min(9, (Number(preset.tone) || 0) + 0.5)
-        : preset.tone,
+      value: isHeavy ? Math.min(9, (Number(preset.tone) || 0) + 0.5) : preset.tone,
     },
     {
       id: "gain",
       label: "GAIN",
-      value: isHeavy
-        ? Math.min(9, (Number(preset.gain) || 0) + 1)
-        : preset.gain,
+      value: isHeavy ? Math.min(9, (Number(preset.gain) || 0) + 1) : preset.gain,
     },
     {
       id: "type",
       label: "TYPE",
-      value: isHeavy
-        ? Math.min(9, (Number(preset.type) || 0) + 1)
-        : preset.type,
+      value: isHeavy ? Math.min(9, (Number(preset.type) || 0) + 1) : preset.type,
     },
   ];
 
@@ -159,7 +183,6 @@ export default function PresetDetailsPage({
       <Header />
 
       <main className="relative z-[2] flex-1 w-full max-w-5xl mx-auto px-6 pt-32 pb-24 flex flex-col gap-10">
-        {/* Preset Header */}
         <div className="flex flex-col gap-4">
           <div className="flex items-start justify-between gap-4">
             <div>
@@ -174,7 +197,6 @@ export default function PresetDetailsPage({
           </div>
         </div>
 
-        {/* Warning Box */}
         {preset.aviso && (
           <div className="flex items-start gap-3 bg-yellow-500/10 border border-yellow-500/20 rounded-xl p-5 text-yellow-500">
             <AlertTriangle className="w-6 h-6 shrink-0" />
@@ -182,35 +204,34 @@ export default function PresetDetailsPage({
           </div>
         )}
 
-        {/* Cube Baby Visual */}
+        {/* Cube Baby */}
         <div
-          className="rounded-3xl p-8 flex flex-col gap-8 shadow-2xl overflow-x-auto border border-zinc-700/40"
-          style={{ backgroundColor: "#1a1d22" }}
+          style={{
+            backgroundColor: "#1a1a1e",
+            borderRadius: 12,
+            padding: "32px 20px 28px",
+            display: "flex",
+            flexDirection: "column",
+            gap: 28,
+            boxShadow: "0 2px 16px rgba(0,0,0,0.4)",
+            maxWidth: 720,
+            margin: "0 auto",
+            overflow: "visible",
+          }}
         >
-          {/* Knobs Row */}
-          <div className="flex items-end justify-between min-w-[700px]">
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", minWidth: 680, overflowX: "auto" }}>
             {settings.map((knob) => {
-              const hasDots = knob.id === "ircab" || knob.id === "type";
-              const intervals = hasDots ? 8 : 9;
+              let styleType: "smooth" | "dots" = "smooth";
+              if (knob.id === "ircab" || knob.id === "type") styleType = "dots";
+
+              const intervals = styleType === "dots" ? 8 : 9;
               const value = Math.min(Number(knob.value) || 0, intervals);
               const rotation = -135 + (value / intervals) * 270;
 
               return (
-                <div
-                  key={`knob-${knob.id}`}
-                  className="flex flex-col items-center gap-2"
-                >
-                  <Knob rotation={rotation} hasDots={hasDots} />
-                  <span
-                    className={`text-[10px] font-bold tracking-wider transition-colors duration-500 ${
-                      isHeavy &&
-                      (knob.id === "gain" ||
-                        knob.id === "type" ||
-                        knob.id === "tone")
-                        ? "text-white"
-                        : "text-white/70"
-                    }`}
-                  >
+                <div key={`knob-${knob.id}`} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 3 }}>
+                  <Knob rotation={rotation} styleType={styleType} />
+                  <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: 1.2, color: "rgba(255,255,255,0.85)", textTransform: "uppercase" as const }}>
                     {knob.label}
                   </span>
                 </div>
@@ -218,52 +239,21 @@ export default function PresetDetailsPage({
             })}
           </div>
 
-          {/* Footswitches Row */}
-          <div className="flex items-center justify-between min-w-[700px] pt-6 border-t border-zinc-700/30 px-16">
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", minWidth: 680, paddingLeft: 32, paddingRight: 32, paddingTop: 8 }}>
             {[0, 1, 2].map((i) => (
-              <div
-                key={i}
-                className="relative"
-                style={{
-                  width: "60px",
-                  height: "60px",
-                  borderRadius: "50%",
-                  background: footswitchGradient,
-                  border: "1.5px solid #606060",
-                  boxShadow:
-                    "0 6px 18px rgba(0,0,0,0.8), 0 2px 6px rgba(0,0,0,0.6), inset 0 1px 3px rgba(255,255,255,0.15), inset 0 -2px 4px rgba(0,0,0,0.3)",
-                }}
-              >
-                {/* Reflexo brilhante */}
-                <div
-                  className="absolute"
-                  style={{
-                    width: "14px",
-                    height: "10px",
-                    borderRadius: "50%",
-                    background:
-                      "radial-gradient(circle, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0) 100%)",
-                    top: "8px",
-                    left: "10px",
-                    filter: "blur(1px)",
-                  }}
-                />
-              </div>
+              <Footswitch key={i} />
             ))}
           </div>
         </div>
 
-        {/* Horizontal Sliders */}
+        {/* Sliders */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-8 bg-zinc-900/50 border border-zinc-800/50 rounded-3xl p-8 shadow-lg">
-          {settings.map((setting) => (
+          {settings.filter((s) => s.id !== "volume").map((setting) => (
             <div key={`slider-${setting.id}`} className="flex flex-col gap-2">
               <div className="flex justify-between items-center">
                 <label
                   className={`text-sm font-bold tracking-wide transition-colors duration-500 ${
-                    isHeavy &&
-                    (setting.id === "gain" ||
-                      setting.id === "type" ||
-                      setting.id === "tone")
+                    isHeavy && (setting.id === "gain" || setting.id === "type" || setting.id === "tone")
                       ? "text-white"
                       : "text-zinc-300"
                   }`}
@@ -272,10 +262,7 @@ export default function PresetDetailsPage({
                 </label>
                 <span
                   className={`text-sm font-mono font-medium px-2 py-0.5 rounded transition-all duration-500 ${
-                    isHeavy &&
-                    (setting.id === "gain" ||
-                      setting.id === "type" ||
-                      setting.id === "tone")
+                    isHeavy && (setting.id === "gain" || setting.id === "type" || setting.id === "tone")
                       ? "bg-white text-black"
                       : "bg-zinc-800 text-white"
                   }`}
@@ -296,12 +283,9 @@ export default function PresetDetailsPage({
           ))}
         </div>
 
-        {/* Footer: Rating and Action */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-8 pt-8 border-t border-zinc-800/50">
           <div className="flex flex-col gap-3 items-center sm:items-start">
-            <span className="text-sm font-medium text-zinc-400">
-              Avalie este preset
-            </span>
+            <span className="text-sm font-medium text-zinc-400">Avalie este preset</span>
             <div className="flex items-center gap-1">
               {[1, 2, 3, 4, 5].map((star) => (
                 <button
@@ -311,9 +295,7 @@ export default function PresetDetailsPage({
                 >
                   <Star
                     className={`w-7 h-7 transition-colors duration-300 ${
-                      star <= rating
-                        ? "fill-yellow-500 text-yellow-500"
-                        : "text-zinc-700"
+                      star <= rating ? "fill-yellow-500 text-yellow-500" : "text-zinc-700"
                     }`}
                   />
                 </button>
