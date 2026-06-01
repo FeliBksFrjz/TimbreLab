@@ -18,7 +18,7 @@ export default function Home() {
         <div className="absolute inset-0 bg-[#000000] z-0" />
 
         {/* Conteúdo com z-index maior */}
-        <div className="relative z-[2] flex flex-col items-center justify-center text-center w-full min-h-screen px-6">
+        <div className="relative z-[2] flex flex-col items-center justify-start md:justify-center text-center w-full min-h-screen px-6 pt-20 md:pt-0">
           {/* Imagem 2D da Cube Baby com Framer Motion */}
           <motion.img
             src="/images/cube-baby.png"
@@ -26,7 +26,7 @@ export default function Home() {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1.2, ease: "easeOut" }}
-            className="w-full max-w-[700px] h-auto object-contain"
+            className="w-full max-w-[90%] md:max-w-[700px] h-auto object-contain mx-auto"
           />
 
           {/* Título Principal */}

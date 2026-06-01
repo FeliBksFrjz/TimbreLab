@@ -206,6 +206,7 @@ export default function PresetDetailsPage({
 
         {/* Cube Baby */}
         <div
+          className="overflow-x-auto md:overflow-x-visible"
           style={{
             backgroundColor: "#1a1a1e",
             borderRadius: 12,
@@ -216,10 +217,10 @@ export default function PresetDetailsPage({
             boxShadow: "0 2px 16px rgba(0,0,0,0.4)",
             maxWidth: 720,
             margin: "0 auto",
-            overflow: "visible",
+            WebkitOverflowScrolling: "touch",
           }}
         >
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", minWidth: 680, overflowX: "auto" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", minWidth: 700, paddingRight: 20, overflowX: "auto" }}>
             {settings.map((knob) => {
               let styleType: "smooth" | "dots" = "smooth";
               if (knob.id === "ircab" || knob.id === "type") styleType = "dots";
