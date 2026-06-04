@@ -179,7 +179,7 @@ export default function PresetDetailsPage({
   ];
 
   return (
-    <div className="relative min-h-screen bg-[#000000] overflow-x-hidden flex flex-col">
+    <div className="relative min-h-screen bg-[#000000] overflow-x-clip flex flex-col">
       <Header />
 
       <main className="relative z-[2] flex-1 w-full max-w-5xl mx-auto px-6 pt-32 pb-24 flex flex-col gap-10">
@@ -210,17 +210,16 @@ export default function PresetDetailsPage({
             backgroundColor: "#1a1a1e",
             borderRadius: 12,
             padding: "32px 20px 28px",
-            display: "flex",
-            flexDirection: "column",
-            gap: 28,
             boxShadow: "0 2px 16px rgba(0,0,0,0.4)",
-            maxWidth: 720,
+            maxWidth: "100%",
             margin: "0 auto",
-            overflowX: "auto",
+            overflowX: "scroll",
+            overflowY: "hidden",
             WebkitOverflowScrolling: "touch",
           }}
         >
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", minWidth: 680, paddingRight: 20 }}>
+          <div style={{ minWidth: 680, display: "flex", flexDirection: "column", gap: 28 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", paddingRight: 20 }}>
             {settings.map((knob) => {
               let styleType: "smooth" | "dots" = "smooth";
               if (knob.id === "ircab" || knob.id === "type") styleType = "dots";
@@ -240,10 +239,11 @@ export default function PresetDetailsPage({
             })}
           </div>
 
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", minWidth: 680, paddingLeft: 32, paddingRight: 20, paddingTop: 8 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", paddingLeft: 32, paddingRight: 20, paddingTop: 8 }}>
             {[0, 1, 2].map((i) => (
               <Footswitch key={i} />
             ))}
+          </div>
           </div>
         </div>
 
