@@ -206,7 +206,6 @@ export default function PresetDetailsPage({
 
         {/* Cube Baby */}
         <div
-          className="overflow-x-auto md:overflow-x-visible"
           style={{
             backgroundColor: "#1a1a1e",
             borderRadius: 12,
@@ -217,10 +216,11 @@ export default function PresetDetailsPage({
             boxShadow: "0 2px 16px rgba(0,0,0,0.4)",
             maxWidth: 720,
             margin: "0 auto",
+            overflowX: "auto",
             WebkitOverflowScrolling: "touch",
           }}
         >
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", minWidth: 700, paddingRight: 20, overflowX: "auto" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", minWidth: 680, paddingRight: 20 }}>
             {settings.map((knob) => {
               let styleType: "smooth" | "dots" = "smooth";
               if (knob.id === "ircab" || knob.id === "type") styleType = "dots";
@@ -240,7 +240,7 @@ export default function PresetDetailsPage({
             })}
           </div>
 
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", minWidth: 680, paddingLeft: 32, paddingRight: 32, paddingTop: 8 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", minWidth: 680, paddingLeft: 32, paddingRight: 20, paddingTop: 8 }}>
             {[0, 1, 2].map((i) => (
               <Footswitch key={i} />
             ))}
