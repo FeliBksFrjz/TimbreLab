@@ -5,45 +5,35 @@ import Link from "next/link";
 import { Header } from "@/components/header";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/lib/supabase";
+import { useRouter } from "next/navigation";
 
 export default function RegisterPage() {
+  const router = useRouter();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const handleRegister = async (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    console.log("Iniciando registro...");
-    console.log("Email:", email, "Nome:", name);
-    console.log("Supabase URL definida?", !!process.env.NEXT_PUBLIC_SUPABASE_URL);
-
     setLoading(true);
     setError(null);
-    setSuccess(null);
 
-    // Supabase permite armazenar metadados adicionais, como nome
-    const { data, error } = await supabase.auth.signUp({
+    const { error } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        data: {
-          name,
-        }
-      }
+        data: { name },
+      },
     });
-
-    console.log("Resposta do Supabase SignUp:", { data, error });
 
     if (error) {
       setError(error.message);
+      setLoading(false);
     } else {
-      setSuccess("Conta criada! Verifique seu email.");
+      router.push("/presets");
     }
-    setLoading(false);
   };
 
   return (

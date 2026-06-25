@@ -29,6 +29,9 @@ export function Header() {
           <Link href="/presets" className="text-sm font-medium text-zinc-400 hover:text-white transition-colors">
             Biblioteca
           </Link>
+          <Link href="/comunidade" className="text-sm font-medium text-zinc-400 hover:text-white transition-colors">
+            Comunidade
+          </Link>
           <Link href="/#planos" className="text-sm font-medium text-zinc-400 hover:text-white transition-colors">
             Planos
           </Link>

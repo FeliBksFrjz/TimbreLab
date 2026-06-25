@@ -14,13 +14,9 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
-    console.log("Iniciando login...");
-    console.log("Email:", email);
-    console.log("Supabase URL definida?", !!process.env.NEXT_PUBLIC_SUPABASE_URL);
-
     setLoading(true);
     setError(null);
 
@@ -28,8 +24,6 @@ export default function LoginPage() {
       email,
       password,
     });
-
-    console.log("Resposta do Supabase SignIn:", { data, error });
 
     if (error) {
       setError(error.message);
